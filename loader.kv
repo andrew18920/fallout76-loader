@@ -1,0 +1,74 @@
+<Loader>:
+    do_default_tab: False
+    
+    TabbedPanelItem:
+        text: 'Load'
+        FloatLayout:
+            Button:
+                size_hint: (0.5, 0.9)
+                pos_hint: {'x':0, 'y':0.1}
+                on_press: root.adventure()
+                Image:
+                    id: ADV
+                    x: self.parent.width * 0.5 - self.width * 0.5
+                    y: 84
+                    size: (440, 716)
+                    
+            Button:
+                size_hint: (0.5, 0.9)
+                pos_hint: {'x':0.5, 'y':0.1}
+                on_press: root.nw()
+                Image:
+                    id: NW
+                    x: 440 + self.parent.width * 0.5 - self.width * 0.5
+                    y: 84
+                    size: (440, 716)
+
+            Button:
+                id: load
+                size_hint: (1, None)
+                height: 84
+                pos_hint: {'x':0, 'y':0}
+                text: 'Load game'
+                on_press: root.loadGame()
+
+    TabbedPanelItem:
+        text: 'Mods'
+        StackLayout:
+            id: modList
+            orientation: 'lr-tb'
+
+    TabbedPanelItem:
+        text: 'Settings'
+        StackLayout:
+            id: settings
+            orientation: 'lr-tb'
+
+<Setup>:
+    StackLayout:
+        orientation: 'lr-tb'
+        Label:
+            height: 50
+            size_hint: (0.3, None)
+            text: 'home_dir: '
+        TextInput:
+            id: home_dir
+            height: 50
+            multiline: False
+            size_hint: (0.7, None)
+            text: 'Enter the location of your local FO76 data folder'
+        Label:
+            height: 50
+            size_hint: (0.3, None)
+            text: 'game_dir: '
+        TextInput:
+            id: game_dir
+            multiline: False
+            height: 50
+            size_hint: (0.7, None)
+            text: 'Enter the main FO76 game foler'
+        Button:
+            height: 50
+            size_hint: (1, None)
+            text: 'Continue'
+            on_press: root.completeSetup()
