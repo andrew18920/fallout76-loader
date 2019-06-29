@@ -2,7 +2,8 @@ import os
 import errno
 from os import walk
 
-def createIni(MODS_DIR, HOME_DIR, IGNORE_MODS):
+def createIni(MODS_DIR, HOME_DIR, IGNORE_MODS, IMPORT_INI):
+    print(IMPORT_INI)
     RESOURCE_MAP = [
         {
             'filename': 'sResourceStartUpArchiveList',
@@ -175,6 +176,10 @@ def createIni(MODS_DIR, HOME_DIR, IGNORE_MODS):
                 RESOURCE['filename'] + " = %s\r\n"
                 % (DEFAULT_MODS + MOD_LIST + DIFF_LIST)
             )
+
+    if IMPORT_INI:
+        IMPORT_FILE = open(IMPORT_INI, "r")
+        CUSTOM_INI_FILE.write(IMPORT_FILE.read())
 
     CUSTOM_INI_FILE.close()
 

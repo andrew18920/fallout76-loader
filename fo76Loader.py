@@ -46,9 +46,11 @@ class Loader(TabbedPanel, FloatLayout):
         for key,value in self.settings.items():
             if type(value)==str:
                 inp = TextInput(height=50, multiline=False, size_hint=(0.7, None), text=value)
-                self.ids.settings.add_widget(Label(height=50, size_hint=(0.3, None), text=key))
-                self.ids.settings.add_widget(inp)
-                self.setting_inputs[key] = inp
+            elif type(value)==bool:
+                inp = CheckBox(active=value,height=50, size_hint=(0.7,None))
+            self.ids.settings.add_widget(Label(height=50, size_hint=(0.3, None), text=key))
+            self.ids.settings.add_widget(inp)
+            self.setting_inputs[key] = inp
 
         self.ids.settings.add_widget(Button(height=50, size_hint=(1, None), text='Save settings',on_press=self.updateSettings))
 
@@ -67,6 +69,8 @@ class Loader(TabbedPanel, FloatLayout):
         for key,value in self.settings.items():
             if type(value)==str:
                 self.settings[key] = self.setting_inputs[key].text
+            elif type(value)==bool:
+                self.settings[key] = self.setting_inputs[key].active
         self.saveSettings()
         
     def loadSettings(self):
@@ -75,7 +79,9 @@ class Loader(TabbedPanel, FloatLayout):
         except:
             settings = {
                 'game_dir':'',
-                'home_dir':''
+                'home_dir':'',
+                'import_ini':False,
+                'import_ini_file':''
             }
             self.saveSettings(settings)
 
@@ -112,7 +118,7 @@ class Loader(TabbedPanel, FloatLayout):
             if obj.active == False:
                 ignore_mods.append(name)
             
-            createIni(self.mods_dir, self.settings['home_dir'], ignore_mods)
+            createIni(self.mods_dir, self.settings['home_dir'], ignore_mods, self.settings['import_ini_file'] if self.settings['import_ini'] else None)
             self.customIniButton.text = 'Create custom ini (last updated: {})'.format(ctime(os.path.getmtime(self.loader_dir + r'\Fallout76Custom.ini')))
 
 class Setup(StackLayout):
@@ -120,7 +126,7 @@ class Setup(StackLayout):
         super(Setup, self).__init__(**kwargs)
 
     def completeSetup(self):
-        settings = {'game_dir':self.ids.game_dir.text, 'home_dir':self.ids.home_dir.text}
+        settings = {'game_dir':self.ids.game_dir.text, 'home_dir':self.ids.home_dir.text, 'import_ini':False, 'import_ini_file':''}
         with open('settings.json', 'w') as file:
             file.write(json.dumps(settings))
         App.get_running_app().stop()
